@@ -1,0 +1,8 @@
+{
+    "py/object": "Lesson.Lesson",
+    "name":"Lesson 1",
+    "speed":5,
+    "accuracy":0.45,
+    "showKeys":true,
+    "text":"the quick brown dog jumps over the lazy fox"
+}

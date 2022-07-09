@@ -1,0 +1,8 @@
+{
+    "py/object": "Lesson.Lesson",
+    "name":"Lesson 2",
+    "speed":6,
+    "accuracy":0.5,
+    "showKeys":true,
+    "text":"another typing lesson"
+}
