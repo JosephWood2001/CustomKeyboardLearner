@@ -21,9 +21,10 @@ class Lesson():
     def init(self,root,home):
         self.cursorIndex = 0
         self.startTime = -1
+        self.done = False
 
         self.frame = ttk.Frame(root, padding=10)
-        self.frame.bind('<Key>', lambda event: self.keyPressed(event))
+        self.frame.bind('<Key>', self.keyPressed)
         ttk.Label(self.frame, text=self.name).grid(column=0,row=0)
         self.stats = ttk.Frame(self.frame, padding=10)
         self.stats.grid(column=0,row=1)
@@ -56,7 +57,22 @@ class Lesson():
 
         ttk.Button(home, text=self.name, command=lambda: app.openLesson(self,home)).pack()
 
+    def reset(self):
+        self.cursorIndex = 0
+        self.startTime = -1
+        self.done = False
+        self.correctLetters:list[int] = []
+        self.incorrectLetters:list[int] = []
+        self.fixedLetters:list[int] = []
+        self.updateLetterColors()
+        self.currentAcc.config(text="Accuracy:100%")
+        self.clock.config(text="Time:0")
+        self.WPM.config(text="WPM:0")
+        self.frame.bind('<Key>', self.keyPressed)
+    
     def accRefresh(self):
+        if self.done: return
+
         if self.cursorIndex == 0:
             self.currentAcc.config(text="Accuracy:100%")
             return
@@ -64,12 +80,16 @@ class Lesson():
         self.currentAcc.config(text="Accuracy:"+str(currentAccuracy) + "%")
 
     def clockRefresh(self):
+        if self.done or self.startTime == -1: return
+
         totalTime = int(10*(time()-self.startTime))
         self.clock.config(text="Time:"+str(totalTime/10))
         self.WPMRefresh()
         self.clock.after(100,self.clockRefresh)
 
     def WPMRefresh(self):
+        if self.done: return
+
         totalTime = time()-self.startTime
         if(totalTime == 0):
             return
@@ -105,6 +125,16 @@ class Lesson():
                 pass
             
             letter.configure(style="blank.Label")
+
+        #lesson attempt finished
+        if self.cursorIndex > len(self.text) - 1:
+            self.finished()
+
+    def finished(self):
+        
+        self.done = True
+        self.frame.unbind('<Key>')
+        
 
     def keyPressed(self,event):
         if self.startTime == -1:

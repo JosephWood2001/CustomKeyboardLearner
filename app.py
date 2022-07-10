@@ -14,6 +14,7 @@ def openLesson(lesson,home):
 
 def closeLesson(lesson,home):
    lesson.frame.grid_forget()
+   lesson.reset()
    home.pack(fill='both',expand=1)
 
 if __name__ == "__main__":
