@@ -25,8 +25,14 @@ class Lesson():
         self.frame = ttk.Frame(root, padding=10)
         self.frame.bind('<Key>', lambda event: self.keyPressed(event))
         ttk.Label(self.frame, text=self.name).grid(column=0,row=0)
-        self.clock = ttk.Label(self.frame, text='0')
-        self.clock.grid(column=0,row=1)
+        self.stats = ttk.Frame(self.frame, padding=10)
+        self.stats.grid(column=0,row=1)
+        self.clock = ttk.Label(self.stats, text='Time:0')
+        self.clock.grid(column=0,row=0)
+        self.currentAcc = ttk.Label(self.stats, text='Accuracy:100%')
+        self.currentAcc.grid(column=1,row=0)
+        self.WPM = ttk.Label(self.stats, text='WPM:0')
+        self.WPM.grid(column=2,row=0)
 
         self.textFrame = ttk.Frame(self.frame)
         self.letters:list[ttk.Label] = []
@@ -50,13 +56,28 @@ class Lesson():
 
         ttk.Button(home, text=self.name, command=lambda: app.openLesson(self,home)).pack()
 
+    def accRefresh(self):
+        if self.cursorIndex == 0:
+            self.currentAcc.config(text="Accuracy:100%")
+            return
+        currentAccuracy = int(100*(self.cursorIndex - 2 * len(self.incorrectLetters) - len(self.fixedLetters))/(self.cursorIndex))
+        self.currentAcc.config(text="Accuracy:"+str(currentAccuracy) + "%")
+
     def clockRefresh(self):
         totalTime = int(10*(time()-self.startTime))
-        self.clock.config(text=str(totalTime/10))
+        self.clock.config(text="Time:"+str(totalTime/10))
+        self.WPMRefresh()
         self.clock.after(100,self.clockRefresh)
+
+    def WPMRefresh(self):
+        totalTime = time()-self.startTime
+        if(totalTime == 0):
+            return
+        WPM = int(self.cursorIndex/5/totalTime*60)
+        self.WPM.config(text="WPM:"+str(WPM))
     
     def updateLetterColors(self):
-        
+        self.accRefresh()
         for i, letter in enumerate(self.letters):
             if self.cursorIndex == i:
                 letter.configure(style="current.Label")
