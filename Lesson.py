@@ -23,8 +23,10 @@ class Lesson():
         self.startTime = -1
 
         self.frame = ttk.Frame(root, padding=10)
-        ttk.Label(self.frame, text=self.name).grid(column=0,row=0)
         self.frame.bind('<Key>', lambda event: self.keyPressed(event))
+        ttk.Label(self.frame, text=self.name).grid(column=0,row=0)
+        self.clock = ttk.Label(self.frame, text='0')
+        self.clock.grid(column=0,row=1)
 
         self.textFrame = ttk.Frame(self.frame)
         self.letters:list[ttk.Label] = []
@@ -41,13 +43,18 @@ class Lesson():
             if j >= rowLength and letter == ' ':
                 j=0
                 i+=1
-        self.textFrame.grid(column=0,row=1)
+        self.textFrame.grid(column=0,row=2)
         self.updateLetterColors()
 
-        ttk.Button(self.frame, text="Home", command=lambda: app.closeLesson(self,home)).grid(column=0,row=2)
+        ttk.Button(self.frame, text="Home", command=lambda: app.closeLesson(self,home)).grid(column=0,row=3)
 
         ttk.Button(home, text=self.name, command=lambda: app.openLesson(self,home)).pack()
 
+    def clockRefresh(self):
+        totalTime = int(10*(time()-self.startTime))
+        self.clock.config(text=str(totalTime/10))
+        self.clock.after(100,self.clockRefresh)
+    
     def updateLetterColors(self):
         
         for i, letter in enumerate(self.letters):
@@ -81,6 +88,7 @@ class Lesson():
     def keyPressed(self,event):
         if self.startTime == -1:
             self.startTime = time()
+            self.clockRefresh()
 
         if event.char == '\x08' and self.cursorIndex != 0:
             self.cursorIndex -= 1
