@@ -1,6 +1,8 @@
-from random import random
-import json
 import jsonpickle
+from tkinter import *
+from tkinter import ttk
+
+import app
 
 class Lesson():
     
@@ -11,8 +13,19 @@ class Lesson():
         self.showKeys = showKeys
         self.text = text
 
+    def init(self,root,home):
+        self.frame = ttk.Frame(root, padding=10)
+        ttk.Label(self.frame, text=self.name).pack(pady=20)
+        ttk.Button(self.frame, text="Home", command=lambda: app.closeLesson(self,home)).pack()
+
+        ttk.Button(home, text=self.name, command=lambda: app.openLesson(self,home)).pack()
 
 
-def loadLesson(fileName:str) -> Lesson:
+
+def loadLesson(fileName:str,root,home) -> Lesson:
     with open(fileName,'r') as file:
-        return jsonpickle.decode(file.read())
+        lesson = jsonpickle.decode(file.read())
+        lesson.init(root,home)
+        return lesson
+
+
