@@ -10,6 +10,7 @@ import Lesson
 def openLesson(lesson,home):
    home.forget()
    lesson.frame.grid()
+   lesson.frame.focus()
 
 def closeLesson(lesson,home):
    lesson.frame.grid_forget()

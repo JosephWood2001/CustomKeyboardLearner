@@ -1,3 +1,4 @@
+from time import time
 import jsonpickle
 from tkinter import *
 from tkinter import ttk
@@ -19,9 +20,11 @@ class Lesson():
 
     def init(self,root,home):
         self.cursorIndex = 0
+        self.startTime = -1
 
         self.frame = ttk.Frame(root, padding=10)
         ttk.Label(self.frame, text=self.name).grid(column=0,row=0)
+        self.frame.bind('<Key>', lambda event: self.keyPressed(event))
 
         self.textFrame = ttk.Frame(self.frame)
         self.letters:list[ttk.Label] = []
@@ -74,6 +77,81 @@ class Lesson():
                 pass
             
             letter.configure(style="blank.Label")
+
+    def keyPressed(self,event):
+        if self.startTime == -1:
+            self.startTime = time()
+
+        if event.char == '\x08' and self.cursorIndex != 0:
+            self.cursorIndex -= 1
+            self.updateLetterColors()
+            return
+        
+        if event.char == '\x08': return
+        
+        #cursor index incorrect
+        try:
+            self.incorrectLetters.index(self.cursorIndex)
+            if self.text[self.cursorIndex] == event.char:
+                self.incorrectLetters.remove(self.cursorIndex)
+                self.fixedLetters.append(self.cursorIndex)
+                self.cursorIndex+=1
+                self.updateLetterColors()
+                return
+            else:
+                self.cursorIndex+=1
+                self.updateLetterColors()
+                return
+        except ValueError:
+            pass
+
+        #cursor index fixed
+        try:
+            self.fixedLetters.index(self.cursorIndex)
+            if self.text[self.cursorIndex] == event.char:
+                self.cursorIndex+=1
+                self.updateLetterColors()
+                return
+            else:
+                self.fixedLetters.remove(self.cursorIndex)
+                self.incorrectLetters.append(self.cursorIndex)
+                self.cursorIndex+=1
+                self.updateLetterColors()
+                return
+        except ValueError:
+            pass
+
+        #cursor index correct
+        try:
+            self.correctLetters.index(self.cursorIndex)
+            if self.text[self.cursorIndex] == event.char:
+                self.cursorIndex+=1
+                self.updateLetterColors()
+                return
+            else:
+                self.correctLetters.remove(self.cursorIndex)
+                self.incorrectLetters.append(self.cursorIndex)
+                self.cursorIndex+=1
+                self.updateLetterColors()
+                return
+        except ValueError:
+            pass
+
+        #cursor index none
+        if self.text[self.cursorIndex] == event.char:
+            self.correctLetters.append(self.cursorIndex)
+            self.cursorIndex+=1
+            self.updateLetterColors()
+            return
+        else:
+            self.incorrectLetters.append(self.cursorIndex)
+            self.cursorIndex+=1
+            self.updateLetterColors()
+            return
+
+
+        
+
 
 
 def loadLesson(fileName:str,root,home) -> Lesson:
