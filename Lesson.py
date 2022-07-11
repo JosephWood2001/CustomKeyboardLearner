@@ -184,7 +184,10 @@ class Lesson():
         
         if event.char == '\x08': return
         
-        self.keyboard.light(self.text[self.cursorIndex + 1])
+        if self.cursorIndex + 1 < len(self.text):
+            self.keyboard.light(self.text[self.cursorIndex + 1])
+        else:
+            self.keyboard.light('')
 
         #cursor index incorrect
         try:
