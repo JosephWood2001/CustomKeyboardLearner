@@ -5,10 +5,11 @@ from tkinter import ttk
 
 from numpy import pad
 import CompleteWindow
+from Keyboard import Keyboard
 
 import app
 
-rowLength = 30
+rowLength = 60
 
 
 
@@ -59,8 +60,14 @@ class Lesson():
         self.textFrame.grid(column=0,row=2)
         self.updateLetterColors()
 
-        ttk.Button(self.frame, text="Home", command=lambda: app.closeLesson(self,home)).grid(column=0,row=3)
+        #Keyboard
+        self.keyboardFrame = Frame(self.frame)
+        self.keyboard = Keyboard(self.keyboardFrame)
+        self.keyboardFrame.grid(column=0,row=3)
 
+        #Home button
+        ttk.Button(self.frame, text="Home", command=lambda: app.closeLesson(self,home)).grid(column=0,row=4)
+        #Lesson button
         ttk.Button(home, text=self.name, command=lambda: app.openLesson(self,home)).pack()
 
     def reset(self):
