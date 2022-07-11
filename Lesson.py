@@ -165,6 +165,13 @@ class Lesson():
             success = CompleteWindow.Success(lambda: app.closeLesson(self,self.home),self.reset,None)
 
     def keyPressed(self,event):
+
+        if (event.keysym == "Shift_L" or event.keysym == "Shift_R" or event.keysym == "Control_L"
+            or event.keysym == "Control_R" or event.keysym == "Caps_Lock" or event.keysym == "Alt_L"
+            or event.keysym == "Alt_R" or event.keysym == "Win_L" or event.keysym == "App"
+            or event.keysym == "Return"):
+            return
+
         if self.startTime == -1:
             self.startTime = time()
             self.clockRefresh()
