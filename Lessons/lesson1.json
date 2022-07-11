@@ -4,5 +4,5 @@
     "speed":5,
     "accuracy":0.45,
     "showKeys":true,
-    "text":"Instead of declaring the precise location of a widget, the pack() method declares the position of widgets in relation to each other. However, pack() is limited in precision compared to place() and grid() which feature absolute positioning. For simple positioning of widgets vertically or horizontally in relation to each other, pack() is the Layout Manager of choice."
+    "text":"a0baa0aa a0 00a0af ravrar"
 }

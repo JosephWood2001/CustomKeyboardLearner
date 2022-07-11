@@ -64,6 +64,7 @@ class Lesson():
         self.keyboardFrame = Frame(self.frame)
         self.keyboard = Keyboard(self.keyboardFrame)
         self.keyboardFrame.grid(column=0,row=3)
+        self.keyboard.light(self.text[0])
 
         #Home button
         ttk.Button(self.frame, text="Home", command=lambda: app.closeLesson(self,home)).grid(column=0,row=4)
@@ -183,6 +184,8 @@ class Lesson():
         
         if event.char == '\x08': return
         
+        self.keyboard.light(self.text[self.cursorIndex + 1])
+
         #cursor index incorrect
         try:
             self.incorrectLetters.index(self.cursorIndex)

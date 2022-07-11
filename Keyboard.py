@@ -1,4 +1,5 @@
 from email.policy import default
+import json
 from tkinter import LEFT, Frame, Label
 
 
@@ -69,6 +70,32 @@ class Keyboard():
                 self.keys.append(Key(4,i,tmp,1.6))
                 continue
             self.keys.append(Key(4,i,tmp))
+
+    def light(self,char):
+        with open('keys.json', 'r') as f:
+            chars = json.load(f)
+            try:
+                row = chars[char]['r']
+                column = chars[char]['c']
+                if(chars[char]['s'] == None):
+                    sRow = None
+                    sColumn = None
+                else:
+                    sRow = chars[char]['s']['r']
+                    sColumn = chars[char]['s']['c']
+            except KeyError:
+                row = None
+                column = None
+                sRow = None
+                sColumn = None
+            
+            
+
+        for key in self.keys:
+            if (key.row == row and key.column == column) or (key.row == sRow and key.column == sColumn):
+                key.box.config(background="blue")
+            else:
+                key.box.config(background="grey")
 
 
 class Key():
