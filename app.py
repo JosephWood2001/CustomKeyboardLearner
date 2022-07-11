@@ -17,6 +17,18 @@ def closeLesson(lesson,home):
    lesson.reset()
    home.pack(fill='both',expand=1)
 
+def nextLesson(lesson):
+   
+   index = lessons.index(lesson)
+   if index + 1 < len(lessons):
+      lesson.frame.grid_forget()
+      lesson.reset()
+
+      lessons[index + 1].frame.grid()
+      lessons[index + 1].frame.focus()
+   else:
+      closeLesson(lesson,home)
+
 if __name__ == "__main__":
    root = Tk()
 
@@ -37,9 +49,10 @@ if __name__ == "__main__":
 
    lessons:list[Lesson.Lesson] = []
    for filePath in filePaths:
-      lessons.append(Lesson.loadLesson("Lessons\\"+filePath,root,home))
+      lessons.append(Lesson.loadLesson("Lessons\\"+filePath,root,home, nextLesson ))
       
 
    home.pack(fill='both',expand=1)
 
    root.mainloop()
+

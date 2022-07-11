@@ -2,6 +2,7 @@ from time import time
 import jsonpickle
 from tkinter import *
 from tkinter import ttk
+import CompleteWindow
 
 import app
 
@@ -18,10 +19,13 @@ class Lesson():
         self.showKeys = showKeys
         self.text = text
 
-    def init(self,root,home):
+    def init(self,root,home,nextLesson):
         self.cursorIndex = 0
         self.startTime = -1
         self.done = False
+
+        self.home = home
+        self.nextLesson = nextLesson
 
         self.frame = ttk.Frame(root, padding=10)
         self.frame.bind('<Key>', self.keyPressed)
@@ -98,6 +102,7 @@ class Lesson():
     
     def updateLetterColors(self):
         self.accRefresh()
+        self.WPMRefresh()
         for i, letter in enumerate(self.letters):
             if self.cursorIndex == i:
                 letter.configure(style="current.Label")
@@ -128,13 +133,17 @@ class Lesson():
 
         #lesson attempt finished
         if self.cursorIndex > len(self.text) - 1:
+            self.endTime = time()
             self.finished()
 
     def finished(self):
         
         self.done = True
         self.frame.unbind('<Key>')
-        
+        if self.cursorIndex/5/(self.endTime - self.startTime)*60 >= self.speed and (self.cursorIndex - 2 * len(self.incorrectLetters) - len(self.fixedLetters))/(self.cursorIndex) >= self.accuracy:
+            success = CompleteWindow.Success(lambda: app.closeLesson(self,self.home),self.reset,self.nextLesson)
+        else:
+            success = CompleteWindow.Success(lambda: app.closeLesson(self,self.home),self.reset,None)
 
     def keyPressed(self,event):
         if self.startTime == -1:
@@ -213,10 +222,10 @@ class Lesson():
 
 
 
-def loadLesson(fileName:str,root,home) -> Lesson:
+def loadLesson(fileName:str,root,home,nextLesson) -> Lesson:
     with open(fileName,'r') as file:
         lesson = jsonpickle.decode(file.read())
-        lesson.init(root,home)
+        lesson.init(root,home,lambda : nextLesson(lesson))
         return lesson
 
 
