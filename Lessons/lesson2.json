@@ -1,8 +1,8 @@
 {
     "py/object": "Lesson.Lesson",
     "name":"Lesson 2",
-    "speed":6,
-    "accuracy":0.5,
+    "speed":10,
+    "accuracy":0.90,
     "showKeys":true,
-    "text":"another typing lesson"
+    "text":"ooo iii oioi ooii oooi ioii o i iio oioi oiiio oiioio oioi iiio io oi ooii"
 }
