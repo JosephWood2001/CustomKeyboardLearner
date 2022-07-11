@@ -2,6 +2,8 @@ from time import time
 import jsonpickle
 from tkinter import *
 from tkinter import ttk
+
+from numpy import pad
 import CompleteWindow
 
 import app
@@ -31,11 +33,11 @@ class Lesson():
         self.frame.bind('<Key>', self.keyPressed)
         ttk.Label(self.frame, text=self.name).grid(column=0,row=0)
         self.stats = ttk.Frame(self.frame, padding=10)
-        self.stats.grid(column=0,row=1)
+        self.stats.grid(column=0,row=1,padx=10)
         self.clock = ttk.Label(self.stats, text='Time:0')
-        self.clock.grid(column=0,row=0)
+        self.clock.grid(column=0,row=0,padx=10)
         self.currentAcc = ttk.Label(self.stats, text='Accuracy:100%')
-        self.currentAcc.grid(column=1,row=0)
+        self.currentAcc.grid(column=1,row=0,padx=10)
         self.WPM = ttk.Label(self.stats, text='WPM:0')
         self.WPM.grid(column=2,row=0)
 
@@ -83,6 +85,11 @@ class Lesson():
         currentAccuracy = int(100*(self.cursorIndex - 2 * len(self.incorrectLetters) - len(self.fixedLetters))/(self.cursorIndex))
         self.currentAcc.config(text="Accuracy:"+str(currentAccuracy) + "%")
 
+        if (self.cursorIndex - 2 * len(self.incorrectLetters) - len(self.fixedLetters))/(self.cursorIndex) >= self.accuracy:
+            self.currentAcc.configure(style="above.Label")
+        else:
+            self.currentAcc.configure(style="below.Label")
+
     def clockRefresh(self):
         if self.done or self.startTime == -1: return
 
@@ -99,7 +106,12 @@ class Lesson():
             return
         WPM = int(self.cursorIndex/5/totalTime*60)
         self.WPM.config(text="WPM:"+str(WPM))
-    
+
+        if self.cursorIndex/5/totalTime*60 >= self.speed:
+            self.WPM.configure(style="above.Label")
+        else:
+            self.WPM.configure(style="below.Label") 
+
     def updateLetterColors(self):
         self.accRefresh()
         self.WPMRefresh()

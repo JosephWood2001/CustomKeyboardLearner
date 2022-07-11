@@ -34,6 +34,8 @@ if __name__ == "__main__":
 
    lettersFont = Font(size=20, family="Courier")
    style = ttk.Style()
+   style.configure("above.Label", foreground='green')
+   style.configure("below.Label", foreground='red')
    style.configure("current.Label", background='lightblue', font=lettersFont)
    style.configure("correct.Label", background='lightgreen', font=lettersFont)
    style.configure("incorrect.Label", background='red', font=lettersFont)
