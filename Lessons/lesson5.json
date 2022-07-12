@@ -1,8 +1,8 @@
 {
     "py/object": "Lesson.Lesson",
-    "name":"Lesson 3",
-    "speed":10,
-    "accuracy":0.90,
+    "name":"Lesson 5",
+    "speed":20,
+    "accuracy":0.80,
     "showKeys":true,
     "text":"toast easiest satiete stats oasis asset oats tastes estate tease tests toast"
 }

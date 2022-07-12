@@ -1,6 +1,6 @@
 {
     "py/object": "Lesson.Lesson",
-    "name":"Lesson 3",
+    "name":"Lesson 4",
     "speed":10,
     "accuracy":0.90,
     "showKeys":true,
