@@ -179,7 +179,7 @@ class Lesson():
 
         if event.char == '\x08' and self.cursorIndex != 0:
             self.cursorIndex -= 1
-            self.keyboard.light(self.text[self.cursorIndex + 1])
+            self.keyboard.light(self.text[self.cursorIndex])
             self.updateLetterColors()
             return
         

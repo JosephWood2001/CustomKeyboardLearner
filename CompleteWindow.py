@@ -7,6 +7,9 @@ class Success:
     def __init__(self,home,retry,next):
                
         self.root = tkinter.Tk()
+        self.root.focus_force()
+        self.root.bind('<Return>', lambda event : self.close(next))
+        self.root.bind('<BackSpace>', lambda event : self.close(retry))
 
         if next != None:
             self.title = ttk.Label(self.root,text="Success")
